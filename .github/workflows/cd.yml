@@ -1,48 +1,26 @@
-name: CD
+name: Continuous Deployment to Droplet
 
 on:
   push:
     branches:
-      - main
-    tags:
-      - 'v*'
-  workflow_dispatch:
-
-concurrency:
-  group: cd-${{ github.ref }}
-  cancel-in-progress: true
+      - main  # Sizning asosiy branchingiz nomi
 
 jobs:
-  deploy-digitalocean:
+  deploy:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Check DigitalOcean configuration
-        id: do_config
-        env:
-          DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-          DIGITALOCEAN_APP_ID: ${{ secrets.DIGITALOCEAN_APP_ID }}
-        run: |
-          if [[ -z "$DIGITALOCEAN_ACCESS_TOKEN" || -z "$DIGITALOCEAN_APP_ID" ]]; then
-            echo "ready=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          echo "ready=true" >> "$GITHUB_OUTPUT"
-
-      - name: Install doctl
-        if: steps.do_config.outputs.ready == 'true'
-        uses: digitalocean/action-doctl@v2
+      - name: Deploy to Server via SSH
+        uses: appleboy/ssh-action@master
         with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-
-      - name: Trigger DigitalOcean App Platform deployment
-        if: steps.do_config.outputs.ready == 'true'
-        env:
-          DIGITALOCEAN_APP_ID: ${{ secrets.DIGITALOCEAN_APP_ID }}
-        run: |
-          doctl apps create-deployment "$DIGITALOCEAN_APP_ID" --update-sources --wait --format ID,Phase,Cause
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /root/crm-porject-full-stack
+            git pull origin main
+            docker-compose up -d --build
+            docker image prune -f
