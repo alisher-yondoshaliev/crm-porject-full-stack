@@ -2,6 +2,11 @@
 
 NestJS + Prisma + PostgreSQL asosidagi CRM backend.
 
+## Runtime Requirement
+
+- Node.js `>=20.19.0` (Prisma 7 bilan mos)
+- pnpm `>=9`
+
 ## Local Setup
 
 ```bash
