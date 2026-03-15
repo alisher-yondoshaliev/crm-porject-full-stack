@@ -9,6 +9,9 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    url: process.env["DATABASE_URL"],
+    // Allow client generation in CI/build stages where DATABASE_URL is not injected.
+    url:
+      process.env["DATABASE_URL"] ||
+      "postgresql://postgres:postgres@localhost:5432/postgres?schema=public",
   },
 });

@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "prebuild": "pnpm prisma:generate",
     "build": "nest build",
     "db:seed": "ts-node prisma/seed.ts",
     "format": "prettier --write \"src/**/*.ts\", \"src/**/**/*.ts\"",
