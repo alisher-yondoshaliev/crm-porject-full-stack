@@ -8,7 +8,7 @@ export class RegisterAdminDto {
   fullName: string;
 
   @ApiProperty({
-    example: 'alisher@gmail.com',
+    example: 'kimdir@gmail.com',
     description: 'Email kerak',
   })
   @IsNotEmpty()

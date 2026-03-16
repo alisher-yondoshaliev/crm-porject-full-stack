@@ -12,13 +12,13 @@ import { RolesGuard } from 'src/common/guards/roles-guard';
 import { Roles } from 'src/common/utils/roles.decorator';
 import { Role } from '@prisma/client';
 
-@ApiTags("Auth (Kirish va ro'yxatdan o'tish tizimi)")
+@ApiTags("Auth qismi")
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @ApiOperation({
-    summary: "Yangi ADMIN qo'shish (faqat SUPERADMIN)",
+    summary: "Yangi ADMIN qo'shish. Bu admin shu markazni egasi (faqat SUPERADMIN)",
   })
   @ApiResponse({ status: 201, description: 'ADMIN yaratildi!' })
   @ApiBearerAuth()

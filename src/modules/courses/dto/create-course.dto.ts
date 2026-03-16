@@ -35,16 +35,6 @@ export class CreateCourseDto {
     @Min(0)
     price: number;
 
-    @ApiPropertyOptional({ enum: CourseLevel, example: CourseLevel.BEGINNER })
-    @IsOptional()
-    @IsEnum(CourseLevel)
-    level?: CourseLevel;
-
-    @ApiPropertyOptional({ enum: Status, example: Status.ACTIVE })
-    @IsOptional()
-    @IsEnum(Status)
-    status?: Status;
-
     @ApiPropertyOptional({
         example: 'Backend bo`yicha amaliy kurs',
         description: 'Qo`shimcha tavsif',
