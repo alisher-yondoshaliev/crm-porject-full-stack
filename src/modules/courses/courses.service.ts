@@ -34,8 +34,6 @@ export class CoursesService {
                     name: createCourseDto.name,
                     durationMonth: createCourseDto.durationMonth,
                     durationLesson: createCourseDto.durationLesson,
-                    status: createCourseDto.status,
-                    level: createCourseDto.level,
                     price: createCourseDto.price,
                     description: createCourseDto.description,
                 },

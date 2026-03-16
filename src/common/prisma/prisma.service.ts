@@ -7,8 +7,29 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
   private _client: PrismaClient;
 
   constructor() {
+    const connectionString = process.env.DATABASE_URL;
+
+    if (!connectionString) {
+      throw new Error(
+        'DATABASE_URL is missing. Set it in your environment or .env file.',
+      );
+    }
+
+    let parsedUrl: URL;
+    try {
+      parsedUrl = new URL(connectionString);
+    } catch {
+      throw new Error('DATABASE_URL is invalid. Provide a valid postgres URL.');
+    }
+
+    if (!parsedUrl.password) {
+      throw new Error(
+        'DATABASE_URL password is empty. Add DB password in the URL (encode special chars).',
+      );
+    }
+
     const adapter = new PrismaPg({
-      connectionString: process.env.DATABASE_URL,
+      connectionString,
     });
     this._client = new PrismaClient({ adapter });
   }
